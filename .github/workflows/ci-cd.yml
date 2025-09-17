@@ -20,17 +20,7 @@ jobs:
   build:
     name: Build Project
     runs-on: ubuntu-latest
-    services:
-      postgres:
-        image: postgres:16
-        env:
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: password
-          POSTGRES_DB: proj_db
-        ports:
-          - 5432:5432
-        options: --health-cmd="pg_isready -U postgres" --health-interval=10s --health-timeout=5s --health-retries=5
-
+   
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
@@ -47,32 +37,4 @@ jobs:
       - name: Run Tests
         run: mvn test
 
-      - name: Generate Code Coverage Report
-        run: mvn jacoco:report
-
-      - name: Upload Coverage Report
-        uses: actions/upload-artifact@v4
-        with:
-          name: jacoco-report
-          path: target/site/jacoco/
-
-      - name: SonarCloud Analysis
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: |
-          mvn verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar \
-            -Dsonar.projectKey=varshar-1_varshar-1 \
-            -Dsonar.organization=varshar-1 \
-            -Dsonar.host.url=https://sonarcloud.io \
-            -Dsonar.login=${{ secrets.SONAR_TOKEN }}
-
-      # Add Docker build & push step
-      - name: Build & push Docker image
-        uses: mr-smithers-excellent/docker-build-push@v6
-        with:
-          image: varsha0124/team-service  # Your Docker Hub image name
-          tags: latest
-          registry: docker.io
-          dockerfile: Dockerfile  # This points to the Dockerfile in the current directory
-          username: ${{ secrets.DOCKER_USERNAME }}  # GitHub secret for Docker username
-          password: ${{ secrets.DOCKER_PASSWORD }}  # GitHub secret for Docker password
+     
