@@ -44,17 +44,19 @@ jobs:
             ${{ runner.os }}-maven-
 
       - name: Initialize CodeQL
-        uses: github/codeql-action/init@v2
+        uses: github/codeql-action/init@v3
         with:
-          languages: javascript
+          languages: java
           query-suite: security-extended
       - name: Autobuild
         uses: github/codeql-action/autobuild@v2
-      - name: Run CodeQL Analysis
-        uses: github/codeql-action/analyze@v2
+     
 
       - name: Build with Maven
         run: mvn clean install -DskipTests
+
+      - name: Run CodeQL Analysis
+        uses: github/codeql-action/analyze@v2
 
 
       - name: Run Tests
