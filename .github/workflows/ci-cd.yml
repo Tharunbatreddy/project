@@ -39,6 +39,16 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-maven-
 
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v2
+        with:
+          languages: javascript
+          query-suite: security-extended
+      - name: Autobuild
+        uses: github/codeql-action/autobuild@v2
+      - name: Run CodeQL Analysis
+        uses: github/codeql-action/analyze@v2
+
       - name: Build with Maven
         run: mvn clean install -DskipTests
 
