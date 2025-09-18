@@ -20,6 +20,10 @@ jobs:
   build:
     name: Build Project
     runs-on: ubuntu-latest
+    permissions:            # <<< important
+      contents: read
+      actions: read
+      security-events: write
    
     steps:
       - name: Checkout Code
